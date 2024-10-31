@@ -16,14 +16,16 @@ export const Mesh = forwardRef((props, ref) => {
     })
 
     return (
-        <mesh ref={ref} geometry={nodes.Plane002.geometry}>
-            <meshPhysicalMaterial
-              roughness={0.65}
-              map={aoTexture}
-              aoMap={aoTexture}
-              aoMapIntensity={0.75}
-            />
-        </mesh>
+        <>
+            <mesh ref={ref} geometry={nodes.Plane002.geometry}>
+                <meshPhysicalMaterial
+                roughness={0.65}
+                map={aoTexture}
+                aoMap={aoTexture}
+                aoMapIntensity={0.75}
+                />
+            </mesh>
+        </>
     )
 })
 
