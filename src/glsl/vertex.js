@@ -5,7 +5,7 @@ export const vertex = /* glsl */ `
     varying vec2 vUv;
 
     void main() {
-        vUv = aCoords;
+        vUv = uv;
 
         vec4 mvPosition = uProgress * modelViewMatrix * vec4( position, 1. );
         // start with big particles; give them some perspective

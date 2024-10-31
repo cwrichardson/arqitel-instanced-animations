@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { Suspense, useMemo, useRef } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 
-import { Points } from '@/components/points';
+import { Mesh } from '@/components/mesh';
 
 const View = dynamic(() => import('src/components/view')
     .then((mod) => mod.View), {
@@ -42,7 +42,7 @@ export function Model(props) {
     return (
         <View orbit {...props}>
             <Suspense fallback={null}>
-                <Points
+                <Mesh
                   vertices={vertices}
                   positions={locationCoords}
                   ref={meshRef} />
@@ -50,7 +50,7 @@ export function Model(props) {
                   makeDefault
                   near={0.1}
                   far={3000}
-                  position={[0, 0, 1000]} />
+                  position={[0, 0, 3]} />
                   {/* <ambientLight intensity={0.5} />
                   <directionalLight intensity={0.5} position={[0.5, 0, 0.866]} /> {/* ~60º */}
             </Suspense>

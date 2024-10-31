@@ -2,7 +2,7 @@
 
 import { forwardRef, useRef } from 'react';
 import { extend, useFrame } from '@react-three/fiber';
-import { shaderMaterial } from '@react-three/drei';
+import { shaderMaterial, useGLTF } from '@react-three/drei';
 import { DoubleSide } from 'three';
 import { useControls } from 'leva';
 
@@ -15,9 +15,11 @@ const CustomMaterial = shaderMaterial({
 }, vertex, fragment);
 extend({ CustomMaterial });
 
-export const Points = forwardRef((props, ref) => {
+export const Mesh = forwardRef((props, ref) => {
     const { vertices, positions } = props;
     const shaderRef = useRef();
+
+    const { nodes } = useGLTF('/media/bar.glb');
 
     /**
      * Use leva controls
@@ -43,16 +45,7 @@ export const Points = forwardRef((props, ref) => {
     })
 
     return (
-        <points ref={ref}>
-            <bufferGeometry
-              width={1}
-              height={1}
-              widthSegments={1}
-              heightSegments={1}
-            >
-                <bufferAttribute attach={'attributes-position'} args={[vertices, 3]} />
-                <bufferAttribute attach={'attributes-aCoords'} args={[positions, 2]} />
-            </bufferGeometry>
+        <mesh ref={ref} geometry={nodes.Plane002.geometry}>
             <customMaterial
               ref={shaderRef}
               extensions={{ derivatives: "#extension GL_OES_standard_derivatives : enable"}}
@@ -60,12 +53,10 @@ export const Points = forwardRef((props, ref) => {
               uTime={0}
               vertexShader={vertex}
               fragmentShader={fragment}
-              side={DoubleSide}
               depthTest={false}
-              transparent
             />
-        </points>
+        </mesh>
     )
 })
 
-Points.displayName = 'Points';
+Mesh.displayName = 'Mesh';
