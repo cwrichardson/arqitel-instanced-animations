@@ -51,8 +51,8 @@ export function Model(props) {
                   near={0.1}
                   far={3000}
                   position={[0, 0, 3]} />
-                  {/* <ambientLight intensity={0.5} />
-                  <directionalLight intensity={0.5} position={[0.5, 0, 0.866]} /> {/* ~60º */}
+                  <ambientLight color={0xffffff} intensity={0.7} />
+                  {/* <directionalLight intensity={0.5} position={[0.5, 0, 0.866]} /> /* ~60º */}
             </Suspense>
         </View>
     )
