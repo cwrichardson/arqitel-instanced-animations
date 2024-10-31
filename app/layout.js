@@ -32,6 +32,7 @@ export default function RootLayout({ children }) {
               w={'100vw'}
               direction={'column'}
               justify={'space-between'}
+              bgColor={'background'}
             >
               <ThreeProvider>
                 {children}
