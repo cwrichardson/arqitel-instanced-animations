@@ -20,7 +20,7 @@ export function Model(props) {
             <Suspense fallback={null}>
                 <Mesh
                   ref={meshRef} />
-                <OrthographicCamera makeDefault position={[2, 2, 2]} zoom={240} />
+                <OrthographicCamera makeDefault position={[2, 2, 2]} near={-1000} far={1000} />
                 <ambientLight color={0xffffff} intensity={0.7} />
                 {/* <directionalLight intensity={0.5} position={[0.5, 0, 0.866]} /> /* ~60º */}
             </Suspense>
