@@ -1,18 +1,36 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, Suspense } from 'react';
 import { Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture } from '@react-three/drei';
 
-export const Mesh = forwardRef((props, ref) => {
-    const { nodes } = useGLTF('/media/bar.glb');
+/**
+ * Put materials into its own component, and wrap it in suspense in the mesh
+ * to avoid weird race conditions.
+ */
+const Material = () => {
     const aoTexture = useTexture('/media/ao.png');
     aoTexture.flipY = false;
 
+    return (
+        <meshPhysicalMaterial
+            roughness={0.65}
+            map={aoTexture}
+            aoMap={aoTexture}
+            aoMapIntensity={0.75}
+        />
+    )
+}
+
+export const Mesh = forwardRef((props, ref) => {
+
+    // instance geometry
+    const { nodes } = useGLTF('/media/bar.glb');
     const barGeometry = nodes.Plane002.geometry;
     const instanceGeometry = barGeometry.scale(40, 40, 40);
 
+    // instances
     const iSize = 50;
     const instances = iSize**2;
 
@@ -55,17 +73,12 @@ export const Mesh = forwardRef((props, ref) => {
     })
 
     return (
-        <>
-            <instancedMesh ref={ref} geometry={instanceGeometry} count={instances}>
-                <meshPhysicalMaterial
-                    roughness={0.65}
-                    map={aoTexture}
-                    aoMap={aoTexture}
-                    aoMapIntensity={0.75}
-                />
-                <instancedBufferAttribute attach={'instanceMatrix'} args={[instanceLocMatrixPositions, 16]} />
-            </instancedMesh>
-        </>
+        <instancedMesh ref={ref} geometry={instanceGeometry} count={instances}>
+            <Suspense fallback={null}>
+                <Material />
+            </Suspense>
+            <instancedBufferAttribute attach={'instanceMatrix'} args={[instanceLocMatrixPositions, 16]} />
+        </instancedMesh>
     )
 })
 
