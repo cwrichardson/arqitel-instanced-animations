@@ -56,11 +56,6 @@ const Material = () => {
                 uniform sampler2D uT_transition;
                 uniform sampler2D uT_displacement;
                 uniform sampler2D uT_shadow;
-                uniform vec3 light_color;
-                uniform vec3 ramp_color_one;
-                uniform vec3 ramp_color_two;
-                uniform vec3 ramp_color_three;
-                uniform vec3 ramp_color_four;
                 uniform float height_in;
                 uniform float height_graph_in;
                 uniform float height_graph_out;
@@ -72,16 +67,44 @@ const Material = () => {
                 uniform float height;
 
                 attribute vec2 instanceUV;
+                varying float vHeight;
+                varying float vHeightUv;
             `
         );
 
         // add our customized vertex manipulation
+        // vHeightUv is for the gradient, so we clamp between 0 and 1
         shader.vertexShader = shader.vertexShader.replace(
             '#include <begin_vertex>',
             /* glsl */ `
                 #include <begin_vertex>
+                vHeightUv = clamp(position.y * 2., 0., 1.);
                 vec4 transition = texture2D(uT_transition, instanceUV);
                 transformed *= transition.g;
+                vHeight = transformed.y;
+            `
+        )
+
+        shader.fragmentShader = shader.fragmentShader.replace(
+            '#include <common>',
+            /* glsl */ `
+                #include <common>
+                uniform vec3 light_color;
+                uniform vec3 ramp_color_one;
+                uniform vec3 ramp_color_two;
+                uniform vec3 ramp_color_three;
+                uniform vec3 ramp_color_four;
+
+                varying float vHeight;
+                varying float vHeightUv;
+            `
+        )
+
+        shader.fragmentShader = shader.fragmentShader.replace(
+            '#include <color_fragment>',
+            /* glsl */ `
+                #include <color_fragment>
+                diffuseColor.rgb = vec3(1.,0.,0.);
             `
         )
     }
