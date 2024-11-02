@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, Suspense, useMemo } from 'react';
-import { MeshPhysicalMaterial, Object3D, Texture } from 'three';
+import { Color, MeshPhysicalMaterial, Object3D, Texture } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture } from '@react-three/drei';
 
@@ -14,17 +14,24 @@ const Material = () => {
     aoTexture.flipY = false;
     const instanceTexture = useTexture('/media/texture-mask-graph.png');
 
+    const colors = useMemo(() => ({
+        light_color:       new Color('#ffe9e9'),
+        ramp_color_one:    new Color('#06082D'),
+        ramp_color_two:    new Color('#020284'),
+        ramp_color_three:  new Color('#0000ff'),
+        ramp_color_four:   new Color('#71c7f5')
+    }), [])
+
     const uniforms = useMemo(() => ({
         time: { value: 0 },
         uT_transition: { value: instanceTexture },
         uT_displacement: { value: new Texture() },
         uT_shadow: { value: new Texture() },
-        aoMap: { value: aoTexture },
-        light_color: { value: '#ffe9e9'},
-        ramp_color_one: { value: '#06082D'},
-        ramp_color_two: { value: '#020284'},
-        ramp_color_three: { value: '#0000ff'},
-        ramp_color_four: { value: '#71c7f5'},
+        light_color: { value: colors.light_color},
+        ramp_color_one: { value: colors.ramp_color_one },
+        ramp_color_two: { value: colors.ramp_color_two },
+        ramp_color_three: { value: colors.ramp_color_three },
+        ramp_color_four: { value: colors.ramp_color_four },
         height_in: { value: 0 },
         height_graph_in: { value: 0 },
         height_graph_out: { value: 0 },
@@ -34,7 +41,7 @@ const Material = () => {
         displacement_based_scale: { value: 0 },
         transition_noise: { value: 0 },
         height: { value: 0 }
-    }), [aoTexture, instanceTexture]);
+    }), [ instanceTexture, colors ]);
 
     /**
      * We want to keep all of the magic of MeshPhysicalMaterial, but want
@@ -104,7 +111,9 @@ const Material = () => {
             '#include <color_fragment>',
             /* glsl */ `
                 #include <color_fragment>
-                diffuseColor.rgb = vec3(1.,0.,0.);
+                // diffuseColor.rgb = vec3(1.,0.,0.);
+                vec3 highlight = mix(ramp_color_three, ramp_color_four, vHeightUv);
+                diffuseColor.rgb = highlight;
             `
         )
     }
@@ -167,7 +176,6 @@ export const Mesh = forwardRef((props, ref) => {
     }
     const instanceLocMatrixPositions = new Float32Array(positions);
     const instanceUV = new Float32Array(instancePositions);
-    console.log(instanceUV)
 
     useFrame((state, delta, xrFrame) => {
         // executes 1/frame, so we can just directly morph the ref with a delta
@@ -176,7 +184,6 @@ export const Mesh = forwardRef((props, ref) => {
     })
 
     const foo = (<instancedMesh geometry={instanceGeometry} count={1} material={MeshPhysicalMaterial} />);
-    console.log(foo);
 
     return (
         <instancedMesh ref={ref} geometry={instanceGeometry} count={instances}>
