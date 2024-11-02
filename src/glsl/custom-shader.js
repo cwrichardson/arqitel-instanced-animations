@@ -68,7 +68,8 @@ export function customizeShaders (shader, uniforms) {
             #include <color_fragment>
             // diffuseColor.rgb = vec3(1.,0.,0.);
             vec3 highlight = mix(ramp_color_three, ramp_color_four, vHeightUv);
-            diffuseColor.rgb = highlight;
+            diffuseColor.rgb = ramp_color_two;
+            diffuseColor.rgb = mix(diffuseColor.rgb, ramp_color_three, vHeightUv);
         `
     )
 }
