@@ -70,6 +70,7 @@ export function customizeShaders (shader, uniforms) {
             vec3 highlight = mix(ramp_color_three, ramp_color_four, vHeightUv);
             diffuseColor.rgb = ramp_color_two;
             diffuseColor.rgb = mix(diffuseColor.rgb, ramp_color_three, vHeightUv);
+            diffuseColor.rgb = mix(diffuseColor.rgb, highlight, clamp(vHeight / 10. - 3., 0., 1.));
         `
     )
 }
