@@ -14,35 +14,36 @@ const CustomMaterial = shaderMaterial({
 extend({ CustomMaterial });
 
 export function TargetWrapper({ target }) {
-    const cam = useRef(null);
+    const barsSceneRef = useRef();
+    const parentMaterialRef = useRef();
 
-    const scene = useMemo(() => {
+    const FBOScene = useMemo(() => {
         const scene = new Scene();
         return scene;
     }, []);
 
     useFrame((state) => {
-        // cam.current.position.z = 5 + Math.sin(state.clock.getElapsedTime() * 1.5) * 2;
-        state.gl.setRenderTarget(target);
-        state.gl.render(scene, cam.current);
-        state.gl.setRenderTarget(null);
+        if (barsSceneRef.current.camera) {
+            state.gl.setRenderTarget(target);
+            state.gl.render(FBOScene, barsSceneRef.current.camera);
+            state.gl.setRenderTarget(null);
+        }
     });
 
     return (
         <>
+            {createPortal(<Bars ref={barsSceneRef} />, FBOScene)}
             <OrthographicCamera
               makeDefault
-              ref={cam}
               args={[-1, 1, 1, -1]}
               near={-1}
               far={1}
             //   @todo figure out why we need to set this zoom
               zoom={700}
             />
-            {createPortal(<Bars />, scene)}
             <mesh>
                 <planeGeometry width={2} height={2} />
-                <customMaterial map={target?.texture} />
+                <customMaterial ref={parentMaterialRef} />
             </mesh>
         </>
     )

@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, Suspense } from 'react';
+import { forwardRef } from 'react';
 import { Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
@@ -62,10 +62,8 @@ export const Mesh = forwardRef((props, ref) => {
     })
 
     return (
-        <instancedMesh ref={ref} geometry={instanceGeometry} count={instances}>
-            <Suspense fallback={null}>
-                <Material />
-            </Suspense>
+        <instancedMesh ref={ref} geometry={instanceGeometry} count={instances} {...props}>
+            <Material />
             <instancedBufferAttribute attach={'instanceMatrix'} args={[instanceLocMatrixPositions, 16]} />
             <instancedBufferAttribute attach={'geometry-attributes-instanceUV'} args={[instanceUV, 2]} />
         </instancedMesh>

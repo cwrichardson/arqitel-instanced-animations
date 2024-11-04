@@ -1,12 +1,21 @@
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { OrthographicCamera } from '@react-three/drei';
 
 import { Mesh } from '@/components/mesh';
 
-export function Bars() {
+export const Bars = forwardRef((props, ref) => {
+    const meshRef = useRef();
+    const cameraRef = useRef();
+
+    useImperativeHandle(ref, () => ({
+        camera: cameraRef.current,
+        mesh: meshRef.current
+    }));
+
     return (
         <>
-            <Mesh />
-            <OrthographicCamera position={[2, 2, 2]} near={-2000} far={2000} />
+            <Mesh ref={meshRef} {...props} />
+            <OrthographicCamera ref={cameraRef} position={[2, 2, 2]} near={-2000} far={2000} />
             <ambientLight color={0xffffff} intensity={0.7} />
             <spotLight
                 angle={1}
@@ -20,4 +29,4 @@ export function Bars() {
             />
         </>
     )
-}
+})
