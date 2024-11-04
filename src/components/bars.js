@@ -30,3 +30,5 @@ export const Bars = forwardRef((props, ref) => {
         </>
     )
 })
+
+Bars.displayName = 'Bars';
