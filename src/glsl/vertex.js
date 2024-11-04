@@ -7,7 +7,8 @@ export const vertex = /* glsl */ `
     void main() {
         vUv = uv;
 
-        vec4 mvPosition = uProgress * modelViewMatrix * vec4( position, 1. );
+        // vec4 mvPosition = uProgress * modelViewMatrix * vec4( position, 1. );
+        vec4 mvPosition = 1. * modelViewMatrix * vec4( position, 1. );
         // start with big particles; give them some perspective
         // gl_PointSize = 200. * ( 1. / - mvPosition.z );
         gl_Position = projectionMatrix * mvPosition;
