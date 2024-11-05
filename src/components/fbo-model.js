@@ -46,8 +46,6 @@ export const FboModel = forwardRef((props, ref) => {
               args={[-1, 1, 1, -1]}
               near={-1}
               far={1}
-            //   @todo figure out why we need to set this zoom
-              zoom={700}
             />
             <mesh ref={meshRef} {...props}>
                 <planeGeometry width={2} height={2} />
