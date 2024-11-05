@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
@@ -8,6 +8,13 @@ import { useGLTF } from '@react-three/drei';
 import { Material } from '@/components/material';
 
 export const Mesh = forwardRef((props, ref) => {
+    const instanceMeshRef = useRef();
+    const materialRef = useRef();
+
+    useImperativeHandle(ref, () => ({
+        iMesh: instanceMeshRef.current,
+        material: materialRef.current
+    }));
 
     // instance geometry
     const { nodes } = useGLTF('/media/bar.glb');
@@ -62,8 +69,8 @@ export const Mesh = forwardRef((props, ref) => {
     })
 
     return (
-        <instancedMesh ref={ref} geometry={instanceGeometry} count={instances} {...props}>
-            <Material />
+        <instancedMesh ref={instanceMeshRef} geometry={instanceGeometry} count={instances} {...props}>
+            <Material ref={materialRef} />
             <instancedBufferAttribute attach={'instanceMatrix'} args={[instanceLocMatrixPositions, 16]} />
             <instancedBufferAttribute attach={'geometry-attributes-instanceUV'} args={[instanceUV, 2]} />
         </instancedMesh>
