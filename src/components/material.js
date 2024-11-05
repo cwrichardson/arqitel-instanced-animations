@@ -1,16 +1,22 @@
 'use client';
 
-import { useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { Color, Texture } from 'three';
 import { useTexture } from '@react-three/drei';
+import { extend } from '@react-three/fiber';
 
+import {
+    PhysicalMaterialWithUniforms
+} from '@/components/physicalMaterialWithUniforms';
 import { customizeShaders } from '@/glsl/custom-shader';
+
+extend({ PhysicalMaterialWithUniforms });
 
 /**
  * Put materials into its own component, and wrap it in suspense in the mesh
  * to avoid weird race conditions.
  */
-export function Material() {
+export const Material = forwardRef((props, ref) => {
     const aoTexture = useTexture('/media/ao.png');
     aoTexture.flipY = false;
     const instanceTexture = useTexture('/media/texture-mask-graph.png');
@@ -25,7 +31,7 @@ export function Material() {
 
     const uniforms = useMemo(() => ({
         time: { value: 0 },
-        uT_transition: { value: instanceTexture },
+        uT_transition: { value: null },
         uT_displacement: { value: new Texture() },
         uT_shadow: { value: new Texture() },
         light_color: { value: colors.light_color},
@@ -42,15 +48,18 @@ export function Material() {
         displacement_based_scale: { value: 0 },
         transition_noise: { value: 0 },
         height: { value: 0 }
-    }), [ instanceTexture, colors ]);
+    }), [ colors ]);
 
     return (
-        <meshPhysicalMaterial
-            roughness={0.65}
-            map={aoTexture}
-            aoMap={aoTexture}
-            aoMapIntensity={0.75}
-            onBeforeCompile={(shader) => customizeShaders(shader, uniforms)}
+        <physicalMaterialWithUniforms
+          ref={ref}
+          roughness={0.65}
+          map={aoTexture}
+          aoMap={aoTexture}
+          aoMapIntensity={0.75}
+          args={[{uniforms, preCompileFunction: customizeShaders}]}
         />
     )
-}
+})
+
+Material.displayName = 'Material';

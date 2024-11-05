@@ -32,15 +32,14 @@ export function TargetWrapper({ target }) {
             state.gl.setRenderTarget(target);
             state.gl.render(FBOScene, fboModelRef.current.camera);
             state.gl.setRenderTarget(null);
-            // console.log(target)
         }
+        mainRef.current.mesh.material.uT_transition = target.texture;
     });
 
     return (
         <>
             {createPortal(<FboModel ref={fboModelRef} />, FBOScene)}
             <Bars ref={mainRef} />
-            {console.log(target.texture)}
         </>
     )
 }

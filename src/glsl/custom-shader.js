@@ -5,10 +5,8 @@
  * material. For this project, we're just starting with the material,
  * and augmenting it with our own shaders and uniforms.
  */ 
-export function customizeShaders (shader, uniforms) {
-    // merge our uniforms with any existing ones
-    shader.uniforms = Object.assign(shader.uniforms, uniforms);
-
+export function customizeShaders (shader) {
+    console.log(shader)
     // add our uniforms to the vertex shader
     shader.vertexShader = shader.vertexShader.replace(
         '#include <common>',
