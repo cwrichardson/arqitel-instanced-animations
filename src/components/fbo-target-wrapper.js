@@ -6,6 +6,7 @@ import { useControls } from 'leva';
 
 import { Bars } from '@/components/bars';
 import { FboModel } from './fbo-model';
+import { Debug } from './debug-model';
 
 export function TargetWrapper({ target }) {
     const fboModelRef = useRef();
@@ -40,6 +41,7 @@ export function TargetWrapper({ target }) {
         <>
             {createPortal(<FboModel ref={fboModelRef} />, FBOScene)}
             <Bars ref={mainRef} />
+            <Debug fboTarget={target} />
         </>
     )
 }
