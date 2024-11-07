@@ -37,8 +37,8 @@ export const FboModel = forwardRef((props, ref) => {
     // for the square texture, we re-use the texture-mask-graph
     // (he made a copy in the video, and changed it to b&w, but
     // ours already is)
-    const squareTexture = useTexture('/media/texture-mask-graph.png');
-    const uaTexture = useTexture('/media/ua-pop.png');
+    const squareTexture = useTexture('/media/fbo.png');
+    const uaTexture = useTexture('/media/ua-mask.png');
 
     return (
         <Suspense fallback={null}>
