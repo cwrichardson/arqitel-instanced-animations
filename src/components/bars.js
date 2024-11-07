@@ -35,7 +35,7 @@ export const Bars = forwardRef((props, ref) => {
                 distance={3000}
                 intensity={300}
                 penumbra={1.5}
-                position={[-80, 200, -80]}
+                position={[-80*3, 200*3, -80*3]}
                 target-position={[0, -80, 200]}
             />
             <Grid
