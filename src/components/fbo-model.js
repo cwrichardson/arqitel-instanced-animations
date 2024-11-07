@@ -1,12 +1,13 @@
 'use client';
 
-import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { extend } from '@react-three/fiber';
 import {
-    OrthographicCamera,
-    shaderMaterial,
-    useTexture
-} from '@react-three/drei';
+    forwardRef,
+    Suspense,
+    useImperativeHandle,
+    useRef
+} from 'react';
+import { extend } from '@react-three/fiber';
+import { shaderMaterial, useTexture } from '@react-three/drei';
 import { Texture } from 'three';
 
 import { vertex } from '@/glsl/vertex';
@@ -40,22 +41,20 @@ export const FboModel = forwardRef((props, ref) => {
     const uaTexture = useTexture('/media/ua-pop.png');
 
     return (
-        <>
-            <OrthographicCamera
+        <Suspense fallback={null}>
+            <orthographicCamera
               ref={cameraRef}
-              args={[-1, 1, 1, -1]}
-              near={-1}
-              far={1}
+              args={[-1, 1, 1, -1, 0, 1]}
             />
             <mesh ref={meshRef} {...props}>
-                <planeGeometry width={2} height={2} />
+                <planeGeometry args={[2, 2]} />
                 <customMaterial
                   uProgress={0}
                   uState1={squareTexture}
                   uState2={uaTexture}
                 />
             </mesh>
-        </>
+        </Suspense>
     )
 })
 
