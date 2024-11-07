@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: 'NextJS React-Three-Fiber Starter',
+  title: 'Arqitel Instanced Animations',
   description: "Template for playing with R3F in Next",
 };
 
