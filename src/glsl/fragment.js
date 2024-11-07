@@ -16,14 +16,19 @@ export const fragment = /* glsl */ `
         float outer_progress = clamp(1.1 * uProgress, 0., 1.);
         float inner_progress = clamp(1.1 * uProgress - 0.05, 0., 1.);
 
-        float innerCircle = smoothstep(
+        float innerCircle = 1. - smoothstep(
             (inner_progress - 0.1) * radius,
             (inner_progress) * radius,
+            dist
+        );
+        float outerCircle = 1. - smoothstep(
+            (outer_progress - 0.1) * radius,
+            (outer_progress) * radius,
             dist
         );
 
         vec4 finalColor = mix(color, color2, uProgress);
         gl_FragColor = finalColor;
-        gl_FragColor = vec4(vec3(innerCircle), 1.);
+        gl_FragColor = vec4(vec3(innerCircle, outerCircle, 0.), 1.);
     }
 `;
