@@ -1,5 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { OrthographicCamera } from '@react-three/drei';
+import {
+    GizmoHelper,
+    GizmoViewport,
+    Grid,
+    OrthographicCamera
+} from '@react-three/drei';
 
 import { Mesh } from '@/components/mesh';
 
@@ -15,7 +20,13 @@ export const Bars = forwardRef((props, ref) => {
     return (
         <>
             <Mesh ref={meshRef} {...props} />
-            <OrthographicCamera ref={cameraRef} position={[2, 2, 2]} near={-2000} far={2000} />
+            <OrthographicCamera
+                ref={cameraRef}
+                position={[2, 2, 2]}
+                near={-2000}
+                far={2000}
+                makeDefault
+            />
             <ambientLight color={0xffffff} intensity={0.7} />
             <spotLight
                 angle={1}
@@ -27,6 +38,15 @@ export const Bars = forwardRef((props, ref) => {
                 position={[-80, 200, -80]}
                 target-position={[0, -80, 200]}
             />
+            <Grid
+                position={[0, -0.01, 0]}
+                sectionSize={10}
+                cellColor={0xffffff}
+                infiniteGrid
+            />
+            <GizmoHelper alignment='bottom-right' margin={[80, 80]}>
+                <GizmoViewport />
+            </GizmoHelper>
         </>
     )
 })
