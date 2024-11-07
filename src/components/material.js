@@ -19,7 +19,7 @@ extend({ PhysicalMaterialWithUniforms });
 export const Material = forwardRef((props, ref) => {
     const aoTexture = useTexture('/media/ao.png');
     aoTexture.flipY = false;
-    const instanceTexture = useTexture('/media/texture-mask-graph.png');
+    const fboTexture = useTexture('/media/fbo.png');
 
     const colors = useMemo(() => ({
         light_color:       new Color('#ffe9e9'),
@@ -31,23 +31,21 @@ export const Material = forwardRef((props, ref) => {
 
     const uniforms = useMemo(() => ({
         time: { value: 0 },
-        uT_transition: { value: null },
-        uT_displacement: { value: new Texture() },
-        uT_shadow: { value: new Texture() },
+        uFBO: { value: null },
         light_color: { value: colors.light_color},
         ramp_color_one: { value: colors.ramp_color_one },
         ramp_color_two: { value: colors.ramp_color_two },
         ramp_color_three: { value: colors.ramp_color_three },
         ramp_color_four: { value: colors.ramp_color_four },
-        height_in: { value: 0 },
-        height_graph_in: { value: 0 },
-        height_graph_out: { value: 0 },
-        height_out: { value: 0 },
-        shadow_in: { value: 0 },
-        shadow_out: { value: 0 },
-        displacement_based_scale: { value: 0 },
-        transition_noise: { value: 0 },
-        height: { value: 0 }
+        // height_in: { value: 0 },
+        // height_graph_in: { value: 0 },
+        // height_graph_out: { value: 0 },
+        // height_out: { value: 0 },
+        // shadow_in: { value: 0 },
+        // shadow_out: { value: 0 },
+        // displacement_based_scale: { value: 0 },
+        // transition_noise: { value: 0 },
+        // height: { value: 0 }
     }), [ colors ]);
 
     return (
@@ -57,6 +55,7 @@ export const Material = forwardRef((props, ref) => {
           map={aoTexture}
           aoMap={aoTexture}
           aoMapIntensity={0.75}
+        //   args={[{uniforms}]}
           args={[{uniforms, preCompileFunction: customizeShaders}]}
         />
     )
