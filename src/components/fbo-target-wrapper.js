@@ -33,7 +33,7 @@ export function TargetWrapper({ target }) {
             state.gl.render(FBOScene, fboModelRef.current.camera);
             state.gl.setRenderTarget(null);
         }
-        mainRef.current.mesh.material.uT_transition = target.texture;
+        mainRef.current.mesh.material.uFBO = target.texture;
     });
 
     return (
