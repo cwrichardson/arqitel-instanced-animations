@@ -47,6 +47,7 @@ export function customizeShaders (shader) {
             vHeightUv = clamp(position.y * 2., 0., 1.);
             vec4 transition = texture2D(uFBO, instanceUV);
             transformed *= transition.g;
+            transformed.y += transition.r * 1.;
             // we have to multiply by 40 here because of our cube height
             // not sure why he didn't have to do that in the videos
             vHeight = transformed.y * 40.;
