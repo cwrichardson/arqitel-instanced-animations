@@ -15,7 +15,7 @@ export function TargetWrapper({ target }) {
         progress: {
             value: 0,
             min: 0,
-            max: 0,
+            max: 1,
             onChange: (v) => {
                 fboModelRef.current.mesh.material.uProgress = v;
             }
