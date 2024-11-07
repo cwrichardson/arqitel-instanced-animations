@@ -27,9 +27,12 @@ export const fragment = /* glsl */ `
             dist
         );
 
+        float displacement = outerCircle - innerCircle;
+        float scale = mix(color.r, color2.r, innerCircle);
+
         vec4 finalColor = mix(color, color2, uProgress);
         gl_FragColor = finalColor;
         // gl_FragColor = vec4(vec3(innerCircle, outerCircle, 0.), 1.);
-        gl_FragColor = vec4(vec3(outerCircle - innerCircle), 1.);
+        gl_FragColor = vec4(vec3(scale), 1.);
     }
 `;
