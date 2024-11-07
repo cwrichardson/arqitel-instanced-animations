@@ -67,6 +67,7 @@ export const Mesh = forwardRef((props, ref) => {
 
     useFrame((state, delta, xrFrame) => {
         // executes 1/frame, so we can just directly morph the ref with a delta
+        materialRef.current.time += delta;
         // ref.current.rotation.x += 0.01;
         // ref.current.rotation.y += 0.02;
     })

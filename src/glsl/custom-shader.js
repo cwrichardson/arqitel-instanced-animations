@@ -1,3 +1,5 @@
+import { CNOISE_WITH_DEPS } from './noise';
+
 /**
  * We want to keep all of the magic of MeshPhysicalMaterial, but want
  * to do some magic of our own. One way would have been to recreate
@@ -35,7 +37,7 @@ export function customizeShaders (shader) {
             attribute vec2 instanceUV;
             varying float vHeight;
             varying float vHeightUv;
-        `
+        ` + CNOISE_WITH_DEPS
     );
 
     // add our customized vertex manipulation
@@ -44,6 +46,10 @@ export function customizeShaders (shader) {
         '#include <begin_vertex>',
         /* glsl */ `
             #include <begin_vertex>
+
+            float n = cnoise(vec3(instanceUV.x * 5., instanceUV.y * 5., time * 0.1));
+            transformed.y += n;
+
             vHeightUv = clamp(position.y * 2., 0., 1.);
             vec4 transition = texture2D(uFBO, instanceUV);
             transformed *= transition.g;
