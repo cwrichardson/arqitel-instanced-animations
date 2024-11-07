@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useMemo } from 'react';
-import { Color, Texture } from 'three';
+import { Color } from 'three';
 import { useTexture } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
 
@@ -19,7 +19,7 @@ extend({ PhysicalMaterialWithUniforms });
 export const Material = forwardRef((props, ref) => {
     const aoTexture = useTexture('/media/ao.png');
     aoTexture.flipY = false;
-    const fboTexture = useTexture('/media/fbo.png');
+    // const fboTexture = useTexture('/media/fbo.png');
 
     const colors = useMemo(() => ({
         light_color:       new Color('#ffe9e9'),
@@ -55,7 +55,6 @@ export const Material = forwardRef((props, ref) => {
           map={aoTexture}
           aoMap={aoTexture}
           aoMapIntensity={0.75}
-        //   args={[{uniforms}]}
           args={[{uniforms, preCompileFunction: customizeShaders}]}
         />
     )
